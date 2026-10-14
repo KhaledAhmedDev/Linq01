@@ -1,5 +1,6 @@
 ﻿using LINQ.Models;
 using System.Collections;
+using System.Text.RegularExpressions;
 using static LINQ.DataSources.Source;
 namespace LINQ
 {
@@ -7,6 +8,7 @@ namespace LINQ
 	{
 		static void Main(string[] args)
 		{
+			#region Session 01
 			#region var vs dynamic
 			//var name = "Khaled";  //Compiler Detecets the type : string Compilation Time
 			//name="Ahmed"; //Valid
@@ -441,7 +443,456 @@ namespace LINQ
 
 			#endregion
 
+			#endregion 
 			#endregion
+
+
+			#region Ordering
+			//var result = ProductList.Order();
+
+			//foreach(var product in result)
+			//{
+			//	Console.WriteLine(product);
+			//}
+
+
+			//var productsByName = ProductList.OrderBy(p => p.ProductName);
+
+
+			//foreach(var product in productsByName)
+			//{
+			//	Console.WriteLine(product);
+			//}
+
+			//var productsInUnitPriceDesc = ProductList.OrderByDescending(p => p.UnitPrice);
+
+			//foreach(var product in productsInUnitPriceDesc)
+			//{
+			//	Console.WriteLine(product);
+			//}
+
+			//========================Ordering With Comparrer============================
+			////The Second Parameter Controls How the keys are Compared====================
+			////Either Built In Comparers as string Comparers or user-defined one
+			//string[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRry", "ClOvEr", "cHeRry" };
+
+			////Default(no Comparer)==stringComparer.Current Culture +lingustic rule
+			//var byDefault = words.OrderBy(w => w);
+
+			//foreach(var word in byDefault)
+			//	Console.Write($"{word} ");
+
+			////Oridnal Ignore Case :A=a but same output for these words
+
+			//var oridnalCaseWordsIgnore = words.OrderBy(w => w, StringComparer.OrdinalIgnoreCase);
+			//foreach(var word in oridnalCaseWordsIgnore)
+			//	Console.WriteLine(word);
+
+
+			//// Ordinal ===> compare Character Codes and Upper CASE fIRST
+			//var ordinal = words.OrderBy(w => w, StringComparer.Ordinal);
+			//foreach(var word in ordinal)
+			//	Console.WriteLine(word);
+
+
+			//// ============================Then By / Then By Descending=======================
+			////Secondary sort:applied Only between elements that are equal based on first criteria
+
+			//// By Category anf Inside each category name
+
+			//var byCategoryThenName = ProductList.OrderBy(P => P.Category)
+			//	.ThenBy(P => P.ProductName);
+
+
+
+			//// By Category and Inside each Catgeory By Price (Highest First)
+			//var byCategoryThenPriceDesc = ProductList.OrderBy(P => P.Category)
+			//									 .ThenByDescending(P => P.UnitPrice);
+
+
+			//var byCategoryThenPriceDesc = from p in ProductList
+			//							  orderby p.Category, p.UnitPrice descending
+			//							  select p;
+
+
+
+
+
+			//foreach (var product in byCategoryThenPriceDesc)
+			//	Console.WriteLine(product);
+
+
+
+			////==============================================Reverse=============================
+			//// Doesn't Sort -just flips the current order of sequence [No Comparison]
+			//// Method Syntax Only ---No Query Syntax
+
+			////string[] names = { "Aya", "Omar", "Amr", "Mohamed", "Ahmed" };
+
+			//var reversed = names.Reverse();
+
+			//foreach(var name in reversed)
+			//{
+			//	Console.WriteLine(name);
+			//}
+
+
+
+			#endregion
+
+			#region Element Operators-Method Syntax Only
+			// First / FirstOrDefault / Last / LastOrDefault / Single / SingleOrDefault / ElementAt / ElementAtOrDefault
+
+			#region First()-FirstOrDefault()
+			//var result = ProductList.First();
+			//var result = ProductList.Where(P => P.UnitPrice > 50m).First();
+			//var result = ProductList.First(p => p.UnitPrice > 1500m);
+			//var result = ProductList.FirstOrDefault(p => p.UnitPrice > 1500m);
+
+			//Console.WriteLine(result);
+
+			#endregion
+
+			#region Last() - LastOrDefault()
+			//var result = ProductList.Last();
+			//var result = ProductList.Where(P => P.UnitPrice > 50m).Last();
+			//var result = ProductList.Last(p => p.UnitPrice > 1500m);
+			//var result = ProductList.FirstOrDefault(p => p.UnitPrice > 1500m);
+			//Console.WriteLine(result);
+			#endregion
+
+			#region ElementAt() - ElementAtOrDefault()
+			//var result = ProductList.ElementAt(999);
+			//var result = ProductList.ElementAtOrDefault(999);
+			//Console.WriteLine(result);
+			#endregion
+
+			#region Single() -  SingleOrDefault()
+			//var result = ProductList.Single(P => P.ProductID == 13);
+			//If No Element Mathcing Condition ,Will Throw Exception
+			//If Sequence Contain Only One Eelement Matching Condition ,will Return It
+			//If Sequence Containt more than one element Matching Condition, trhow exception
+
+
+
+			//var result = ProductList.SingleOrDefault(P => P.ProductID == 13);
+			//If No Element Mathcing Condition ,Will return Default Value [Null]
+			//If Sequence Contain Only One Eelement Matching Condition ,will Return It
+			//If Sequence Containt more than one element Matching Condition, trhow exception
+			//Console.WriteLine(result);
+			#endregion
+			#endregion
+
+			#region Aggregate Operators - Method Syntax Only
+			#region Count() - LongCount()
+			//var productCount = ProductList.Count();
+			//var productCount = ProductList.Count;
+
+			//var productCount = ProductList.Count(p => p.UnitsInStock == 0);
+			//var productCount = ProductList.LongCount(p => p.UnitsInStock == 0);
+
+			//Console.WriteLine(productCount);
+			#endregion
+
+			#region Sum() - Average()
+			//var totalStock = ProductList.Sum(p => p.UnitsInStock);
+			//Console.WriteLine(totalStock);
+
+			//var avgProductPrice = ProductList?.Average(p => p.UnitPrice);
+			//Console.WriteLine(avgProductPrice);
+			#endregion
+
+			#region Max()-Min-MaxBy()-MinBy()
+			////Cheapist and Expensive prodcut price
+			//var cheapestPrice = ProductList.Min(P => P.UnitPrice);
+			//var highestPrice = ProductList.Max(P => P.UnitPrice);
+			//var productWithHighestPrice = ProductList.MaxBy(P => P.UnitPrice);
+			//var productWithLowestPrice = ProductList.MinBy(P => P.UnitPrice);
+
+			//Console.WriteLine(productWithLowestPrice);
+			#endregion
+
+			#region Aggregate()
+
+			//int[] numbers = [1, 2, 3, 4, 5];
+			//int result = numbers.Aggregate((acc, n) => acc * n);
+			//Console.WriteLine($"1x2x3x4x5 = {result}");
+
+			//var result = ProductList.Take(5)
+			//	.Select(P => P.ProductName)
+			//	.Aggregate("", (acc, name) =>acc==""?name: $"{acc},{name}");
+
+			//Console.WriteLine(result); 
+			#endregion
+
+			#endregion
+
+			#region Quantifiers Operators
+			////Any Out Of STock Products
+			//var result = ProductList.Any(P => P.UnitsInStock == 0);
+			//Console.WriteLine(result);
+
+			//All Seafood Products in  Stock
+			//var allInStock = ProductList
+			//			  .Where(P => P.Category == "Seafood")
+			//			  .All(P => P.UnitsInStock > 0);
+
+			//Console.WriteLine(allInStock);
+
+			//int[] nums = [2, 3, 4, 5];
+			//Console.WriteLine($"Contains(4)? {nums.Contains(4)}");
+			//Console.WriteLine($"Contains(9)? {nums.Contains(9)}");
+
+
+			#endregion
+
+			#region Partitoning Operators
+			//int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+
+			#region Take() - Skip()
+			//First 3 Numbers
+			//var result = numbers.Take(3);
+
+			//First 5 products By Price Desc
+			//var result = ProductList.OrderByDescending(P => P.UnitPrice).Take(5);
+
+			//Skip First 4 elements
+			//var result = numbers.Skip(4);
+			//foreach (var num in result)
+			//	Console.WriteLine(num);
+			#endregion
+
+			#region TakeWhile() - SkipWhile()
+			//Take while numbers Less Than 6
+			//var result = numbers.TakeWhile(n => n < 6);
+
+			//Take while value>=Position
+			//var result = numbers.TakeWhile((n, i) => n >= i);
+
+
+			//Skip untill divisble by 3
+			//var result = numbers.SkipWhile(n => n % 3 != 0);
+
+			// Skip While value>=pos
+			//var result = numbers.SkipWhile((n, i) => n >= i);
+			//foreach(var num in result)
+			//	Console.WriteLine(num);
+			#endregion
+
+			#region Hybrid Syntax [Query+Method]
+			//var result = (from p in ProductList
+			//			 orderby p.UnitPrice descending
+			//			 select p).Take(5);
+
+			//foreach(var product in result)
+			//	Console.WriteLine(product);
+			#endregion
+			#endregion
+
+			#region Set Operators
+			#region Distinct() - DistinctBy()
+			//var categories = ProductList.Select(P => P.Category).Distinct();
+
+			//foreach(var category in categories)
+			//	Console.WriteLine(category);
+
+			//string[] dup = { "apple", "Apple", "APPLE", "cherry", "Cherry" };
+			//var withoutDup = dup.Distinct(StringComparer.OrdinalIgnoreCase);
+
+			//foreach(var str in withoutDup)
+			//	Console.WriteLine(str);
+			#endregion
+
+			#region Union()-Intersect()-Except()
+			//int[] a = { 0, 2, 4, 5, 6, 8, 9 };
+			//int[] b = { 1, 3, 5, 7, 8 };
+
+			//string[] list1 = { "apple", "bannana", "cherry" };
+			//string[] list2 = { "Apple", "GRAPE", "CHERRY" };
+
+			#region Union
+			//var result = a.Union(b);
+			//foreach(var item in result)
+			//	Console.WriteLine(item);
+
+			//var prodLetters = ProductList.Select(P => P.ProductName[0].ToString());
+			//var custLetters = CustomerList.Select(c => c.CustomerName[0].ToString());
+
+			//var result = prodLetters.Union(custLetters, StringComparer.OrdinalIgnoreCase);
+			//foreach (var item in result)
+			//   Console.WriteLine(item);
+
+
+			#endregion
+
+			#region Intersect
+			//var result = a.Intersect(b);
+
+			//var result = list1.Intersect(list2, StringComparer.OrdinalIgnoreCase);
+			//foreach(var item in result)
+			//	Console.WriteLine(item);
+
+			#endregion
+
+			#region Except
+			//var result = a.Except(b);
+
+			//var result = list1.Except(list2, StringComparer.OrdinalIgnoreCase);
+			//foreach (var item in result)
+			//	Console.WriteLine(item);
+			#endregion
+			#endregion
+			#endregion
+
+			#region Let and Into Keywords [Valid with Query Expressions Only]
+			//var result = from p in ProductList
+			//			 where p.UnitPrice * 0.9m < 20
+			//			 select new
+			//			 {
+			//				 p.ProductName,
+			//				 p.UnitPrice,
+			//				 PriceAfterDesc = p.UnitPrice * 0.9m
+			//			 };
+
+
+			//var result = from p in ProductList
+			//			 let priceAfterDesc=0.9m*p.UnitPrice
+			//			 where priceAfterDesc< 20
+			//			 select new
+			//			 {
+			//				 p.ProductName,
+			//				 p.UnitPrice,
+			//				 PriceAfterDesc = priceAfterDesc
+			//			 };
+
+			//var result = from p in ProductList
+			//			 select p.UnitPrice * 0.9m
+			//		   into DiscPrice
+			//			 where DiscPrice < 20
+			//			 select DiscPrice;
+			//foreach (var item in result)
+			//	Console.WriteLine(item);
+			#endregion
+
+			#region Grouping Operators
+			#region Example 01
+			//Retrieves all products from ProductList That Out Of Stock , and groups the products by their Category
+			//var result = ProductList
+			//	.Where(P => P.UnitsInStock == 0)
+			//	.GroupBy(p => p.Category);
+
+			//result = from p in ProductList
+			//		 where p.UnitsInStock == 0
+			//		 group p by p.Category;
+
+
+			//foreach(var group in result)
+			//{
+			//	Console.WriteLine($"Category is :{group.Key}--Count of Products:{group.Count()} Products.");
+			//	foreach(var product in group)
+			//	{
+			//		Console.WriteLine(product.ProductName);
+			//	}
+
+			//	Console.WriteLine("============================");
+			//} 
+			#endregion
+
+			#region Example 02
+			// Retrieves all products from ProductList That Out of Stock
+			// Groups the products by their Category.
+			// Filters out categories that contain 2 or fewer products.
+			// Returns an anonymous object with two properties:
+			// CategoryName 
+			// CountOfProducts → the number of products in that category.
+
+			//var result = ProductList
+			//	.Where(P => P.UnitsInStock == 0)
+			//	.GroupBy(P => P.Category)
+			//	.Where(G => G.Count() <= 2)
+			//	.Select(g => new
+			//	{
+			//		CategoryName = g.Key,
+			//		CountOfProducts = g.Count()
+			//	});
+
+
+			//result = from p in ProductList
+			//		 where p.UnitsInStock == 0
+			//		 group p by p.Category
+			//	   into Category
+			//		 where Category.Count() <= 2
+			//		 select new
+			//		 {
+			//			 CategoryName = Category.Key,
+			//			 CountOfProducts = Category.Count()
+			//		 };
+
+			//foreach(var group in result)
+			//	Console.WriteLine(group);
+
+			#endregion
+
+			#region Example 03
+			//Group words by first letter(case -insensitive)
+			//string[] w = { "Apple", "banana", "Avocado", "Berry", "Cherry", "apricot" };
+			//var byLetter = w.GroupBy(s => s[0].ToString(), StringComparer.OrdinalIgnoreCase);
+			//foreach (var g in byLetter)
+			//	Console.WriteLine($"'{g.Key}': {string.Join(", ", g)}");
+			#endregion
+
+			#endregion
+
+			#region Generation Operators
+			//var result = Enumerable.Range(1, 10);
+			//var result = Enumerable.Range(0, 5).Select(n => n * n);
+			//var result = Enumerable.Repeat("Hello", 4);
+			//var result = Enumerable.Empty<Product>();
+			//var result = ProductList.Where(p => p.ProductID == 999)
+			//				 .DefaultIfEmpty(new Product { ProductName = "Unknown Product", UnitPrice = 0m });
+			#endregion
+
+			#region Casting Operators
+			//// ToArray / ToList / ToDictionary / Cast 
+
+
+			//var array = ProductList.Select(p => p.ProductName).ToArray();
+
+			//var list = ProductList.Where(p => p.Category == "Seafood").ToList();
+
+			//var dic01 = ProductList.ToDictionary(p => p.ProductID);
+
+			//var dic02 = ProductList.ToDictionary(p => p.ProductID, p => p.ProductName);
+
+			//var dic03 = CustomerList.ToDictionary(c => c.CustomerID, c => c.CompanyName, StringComparer.OrdinalIgnoreCase);
+
+			//ArrayList al = new() { 1, 2, 3, 4, 5 };
+			//var result = al.Cast<int>();
+
+			//foreach(var item in result)
+			//	Console.WriteLine(item);
+			#endregion
+
+			#region Sequence Operators
+			//int[] a = { 1, 2, 3 };
+			//int[] b = { 3, 4, 5 };
+
+			//var result = a.Concat(b);
+			//var result = ProductList.Select(p => p.ProductName)
+			//				 .Concat(CustomerList.Select(c => c.Country));
+
+			//var result = a.Zip(b, (x, y) => x * y); 
+			//int[] x1 = { 1, 2, 3 };
+			//int[] x2 = { 1, 2, 3 };
+			//int[] x3 = { 1, 2, 4 };
+			//Console.WriteLine("x1 == x2: " + x1.SequenceEqual(x2));
+			//Console.WriteLine("x1 == x3: " + x1.SequenceEqual(x3));
+
+			//string[] s1 = { "Apple", "Banana" };
+			//string[] s2 = { "apple", "BANANA" };
+			//Console.WriteLine(s1.SequenceEqual(s2, StringComparer.OrdinalIgnoreCase));
+			#endregion
+
 
 
 		}
